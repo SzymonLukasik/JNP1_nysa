@@ -19,7 +19,7 @@ int main() {
         copy(sregex_token_iterator(s.begin(), s.end(), whitespace_r, -1), sregex_token_iterator(),
              back_inserter(t));
         cout << t.size() << '\n';
-        for(int i = 0; i < t.size(); i++)
+        for(size_t i = 0; i < t.size(); i++)
             cout << t[i] << '\n';
         cout << "\n";
     }
