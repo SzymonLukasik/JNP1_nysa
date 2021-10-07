@@ -14,22 +14,28 @@ static void report_error(size_t line_nr, const string &line) {
     cout << "Error in line " + to_string(line_nr) + ": " + line + "\n";
 }
 
+static regex get_line_regex() {
+    string number_p = "(\\s+[1-9]\\d{0,8})";
+    string not_p = "NOT" + number_p + "{1}";
+    string xor_p = "XOR" + number_p + "{2}";
+    string others_p = "(AND|NAND|OR|NOR)" + number_p + "{2,}";
+    string operator_p = "(" + number_p + "|" + xor_p + "|" + others_p + ")";
+    string line_pattern = "\\s*" + operator_p + "\\s*";
+    regex line_regex = regex(line_pattern);
+    return line_regex;
+}
+
 static vector<string> tokenize_line(string line) {
     regex whitespace_regex = regex("\\s+");
     vector<string> container;
+
     copy(sregex_token_iterator(line.begin(), line.end(), whitespace_regex, -1),
          sregex_token_iterator(), back_inserter(container));
     return container;
 }
 
 static vector<vector<string>> get_input() {
-    string number_pattern = "(\\s+[1-9]\\d{0,8})";
-    string not_pattern = "NOT" + number_pattern + "{1}";
-    string xor_pattern = "XOR" + number_pattern + "{2}";
-    string others_pattern = "(AND|NAND|OR|NOR)" + number_pattern + "{2,}";
-    string line_pattern = "\\s*(" + number_pattern + "|" + xor_pattern + "|" +
-                          others_pattern + ")\\s*";
-    regex line_regex = regex(line_pattern);
+    regex line_regex = get_line_regex();
     string line;
     size_t line_nr = 1;
     vector<vector<string>> lines;
@@ -47,6 +53,7 @@ static vector<vector<string>> get_input() {
 int main() {
     vector<vector<string>> lines;
     lines = get_input();
+
     for (auto &line: lines) {
         for (auto &s: line)
             cout << s << " ";
