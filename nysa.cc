@@ -188,7 +188,7 @@ static void compute_states(graph_t & graph, gate_map_t & gate_map,
     size_t range = (1 << n_input_signals) - 1;
     for(size_t input_values = 0; input_values <= range; input_values++) {
         size_t signal_idx = n_input_signals - 1, input_it = input_values;
-        while(input_it > 0) {
+        for(size_t i = 0; i < n_input_signals; i++) {
             int signal = input_signals[signal_idx];
             signal_values[signal] = input_it & 1;
             signal_idx--;
