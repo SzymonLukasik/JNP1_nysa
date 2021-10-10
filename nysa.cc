@@ -4,6 +4,7 @@
 #include <regex>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <set>
 
 using namespace std;
@@ -161,24 +162,27 @@ static bool is_sequential(const graph_t& graph, const vector<int>& roots) {
     return false;
 }
 
-static void compute_for_node(graph_t & graph, gate_map_t & gate_map,
-                              map<int, bool> & signal_values, int node) {
-    if(gate_map.find(node) != gate_map.end()) {
-        vector<int> & kids = graph[node];
-        for(auto & kid : kids)
-            compute_for_node(graph, gate_map, signal_values, kid);
-        vector<bool> kids_values = vector<bool>();
-        for(auto & kid : kids)
-            kids_values.push_back(signal_values[kid]);
-        signal_values[node] = get_gate_value(gate_map[node], kids_values);
-    }
-}
-
 static void compute_state(graph_t & graph, gate_map_t & gate_map,
                           vector<int> & roots,
                           map<int, bool> & signal_values) {
-    for(int root : roots)
-        compute_for_node(graph, gate_map, signal_values, root);
+    vector<int> stack = vector<int>(roots);
+    unordered_set<int> entered_gates = unordered_set<int>();
+    while(!stack.empty()) {
+        int node = stack.back();
+        vector<int> & kids = graph[node];
+        if(entered_gates.find(node) == entered_gates.end()) {
+            for(auto & kid : kids)
+                if(signal_values.find(kid) == signal_values.end())
+                    stack.push_back(kid);
+            entered_gates.insert(node);
+        } else {
+            vector<bool> kids_values = vector<bool>();
+            for(auto & kid : kids)
+                kids_values.push_back(signal_values[kid]);
+            signal_values[node] = get_gate_value(gate_map[node], kids_values);
+            stack.pop_back();
+        }
+    }
 }
 
 static void compute_states(graph_t & graph, gate_map_t & gate_map,
@@ -188,7 +192,7 @@ static void compute_states(graph_t & graph, gate_map_t & gate_map,
     size_t range = (1 << n_input_signals) - 1;
     for(size_t input_values = 0; input_values <= range; input_values++) {
         size_t signal_idx = n_input_signals - 1, input_it = input_values;
-        while(input_it > 0) {
+        for(size_t i = 0; i < n_input_signals; i++) {
             int signal = input_signals[signal_idx];
             signal_values[signal] = input_it & 1;
             signal_idx--;
@@ -198,6 +202,7 @@ static void compute_states(graph_t & graph, gate_map_t & gate_map,
         for(auto & map_it : signal_values)
             cout << (map_it.second ? 1 : 0);
         cout << '\n';
+        signal_values.clear();
     }
 }
 
