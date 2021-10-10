@@ -11,7 +11,6 @@ do
     out=${f%in}out
     err=${f%in}err
 
-    echo $f
     ./"$prog" < "$f" 1> "$my_out" 2> "$my_err"
 
     valgrind --error-exitcode=123 --leak-check=full --show-leak-kinds=all \
@@ -24,7 +23,8 @@ do
         val_return="OK"
     fi
 
-    diff "$out" "$my_out" > /dev/null 2>&1
+    #> /dev/null 2>&1
+    diff "$out" "$my_out" 
     status[0]=$?
     diff "$err" "$my_err"
     status[1]=$?

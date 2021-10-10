@@ -61,10 +61,10 @@ static regex get_line_regex() {
 }
 
 static vector<string> tokenize_line(string line) {
-    regex whitespace_regex = regex("\\s+");
+    regex whitespace_regex = regex("[^\\s]+");
     vector<string> vect;
 
-    copy(sregex_token_iterator(line.begin(), line.end(), whitespace_regex, -1),
+    copy(sregex_token_iterator(line.begin(), line.end(), whitespace_regex, 0),
          sregex_token_iterator(), back_inserter(vect));
     return vect;
 }
