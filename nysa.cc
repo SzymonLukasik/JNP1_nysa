@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/* Typ reprezentujący numer sygnału. */
 using signal_t = int32_t;
 
 /* Typ reprezentujący graf sygnałów.
@@ -279,6 +280,9 @@ static void compute_states(graph_t &graph, gate_map_t &gate_map,
 }
 
 int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
     graph_t graph;
     gate_map_t gate_map;
     vector<int> input_signals;
