@@ -259,6 +259,7 @@ static void compute_states(graph_t &graph, gate_map_t &gate_map,
                            vector<signal_t> &input_signals) {
     map<signal_t, bool> signal_values = map<signal_t, bool>();
     size_t n_input_signals = input_signals.size();
+    // Liczba podanych sygnałów wejściowych jest za duża.
     if (n_input_signals >= 64)
         exit(1);
     size_t range = (1 << n_input_signals) - 1;
