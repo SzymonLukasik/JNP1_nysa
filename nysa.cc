@@ -202,20 +202,17 @@ static bool is_sequential(const graph_t &graph, const vector<signal_t> &roots) {
 
     while (!stack.empty()) {
         signal_t node = stack.back();
-        // Wchodzimy do bramki oznaczamy ją jako VISITING
         if (colors.find(node) == colors.end()) {
-            colors[node] = VISITING;
+            colors[node] = VISITING; // Wchodzimy do bramki.
             if (graph.find(node) != graph.end()) {
                 for (auto kid : graph.at(node))
-                    // Dodajemy na stos nieodwiedzone bramki
                     if (colors.find(kid) == colors.end())
-                        stack.push_back(kid);
-                        // Napotkaliśmy bramkę, z której nie wyszliśmy - cykl
+                        stack.push_back(kid); // Dodajemy nieodwiedzone bramki.
                     else if (colors.at(kid) == VISITING)
-                        return true;
+                        return true; // Napotkaliśmy cykl.
             }
-        } else { // Wychodzimy z bramki i oznaczamy ją jako VISITED
-            colors[node] = VISITED;
+        } else {
+            colors[node] = VISITED; // Wychodzimy z bramki.
             stack.pop_back();
         }
     }
@@ -237,14 +234,12 @@ static void compute_state(graph_t &graph, gate_map_t &gate_map,
         signal_t node = stack.back();
         vector<signal_t> &kids = graph[node];
 
-        // Wchodzimy do bramki.
         if (entered_gates.find(node) == entered_gates.end()) {
-            entered_gates.insert(node);
+            entered_gates.insert(node); // Wchodzimy do bramki.
             for (auto &kid : kids)
-                // Dodajemy na stos bramki o nieobliczonej wartości.
                 if (signal_values.find(kid) == signal_values.end())
-                    stack.push_back(kid);
-        } else { // Wychodzimy z bramki i obliczamy jej wartość.
+                    stack.push_back(kid); // Dodajemy niepoliczone bramki.
+        } else { // Obliczamy wartość bramki i wychodzimy z niej.
             vector<bool> kids_values = vector<bool>();
             for (auto &kid : kids)
                 kids_values.push_back(signal_values[kid]);
