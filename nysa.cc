@@ -72,8 +72,8 @@ static void report_syntax_error(size_t line_nr, const string &line) {
     ERROR_REPORTED = true;
 }
 
-/* Informuje o błędzie podłączenia wyjść wielu bramek
- * do jednego sygnału o numerze 'signal_nr' w linii o numerze 'line_nr'. */
+/* Informuje o błędzie podłączenia wyjść wielu bramek do jednego
+ * sygnału o numerze 'signal_nr' w linii o numerze 'line_nr'. */
 static void report_signal_multiple_outputs_error(size_t line_nr,
                                                  signal_t signal_nr) {
     cerr << "Error in line " + to_string(line_nr) + ": signal " +
@@ -106,8 +106,8 @@ static vector<string> tokenize_line(string line) {
 }
 
 /* Konwertuje stringi z wyznaczonego przez wskaźniki 'begin' oraz 'end'
- * przedziału wektora na liczby reprezentujące numery sygnałów i zwraca wynik
- * w postaci wektora liczb. */
+ * przedziału wektora na liczby reprezentujące numery sygnałów i zwraca
+ * wynik w postaci wektora liczb. */
 static vector<signal_t> get_signal_numbers(vector<string>::iterator begin,
                                            vector<string>::iterator end) {
     vector<signal_t> numbers = vector<signal_t>();
@@ -118,7 +118,7 @@ static vector<signal_t> get_signal_numbers(vector<string>::iterator begin,
 
 /* Przetwarza poprawną linię 'line'.
  * Jeśli sygnał, do którego ma być podłączona bramka jest jeszcze wolny,
- * dodaje nowe połączenia do gragu 'graph',oraz mapy 'gate_map'.
+ * dodaje nowe połączenia do gragu 'graph' oraz mapy 'gate_map'.
  * Numer bramki dodaje do zbiorów 'all_signals' oraz 'gate_signals', a
  * numery jej sygnałów wejściowych dodaje do zbioru 'all_signals'.
  * W przeciwnym przypadku zgłasza wystąpienie błędu. */
@@ -224,7 +224,7 @@ static bool is_sequential(const graph_t &graph, const vector<signal_t> &roots) {
  * wektora zawierającego korzenie grafu 'roots' oraz mapy 'signal_values'
  * zawierającej informacje o wartości wszystkich sygnałów wejściowych,
  * oblicza wartości pozostałych sygnałów i zapisuje wynik w
- * mapie 'signal_values' */
+ * mapie 'signal_values'. */
 static void compute_state(graph_t &graph, gate_map_t &gate_map,
                           vector<signal_t> &roots,
                           map<signal_t, bool> &signal_values) {
@@ -253,7 +253,7 @@ static void compute_state(graph_t &graph, gate_map_t &gate_map,
 /* Dla grafu 'graph', mapy definiującej rodzaj bramek 'gate_map' oraz
  * wektora korzeni grafu 'roots' iteruje się po wszystkich kombinacjach
  * sygnałów wejściowych, oblicza dla nich wartości pozostałych sygnałów
- * i wypisuje wartości wszystkich sygnalów. */
+ * i wypisuje wartości wszystkich sygnałów. */
 static void compute_states(graph_t &graph, gate_map_t &gate_map,
                            vector<signal_t> &roots,
                            vector<signal_t> &input_signals) {
